@@ -12,6 +12,7 @@ def scrape_all():
     browser = Browser('chrome', **executable_path, headless=True)
     
     news_title, news_paragraph = mars_news(browser)
+    hemisphere_image_urls = hemisphere(browser)
     
     # Run all scraping functions and store results in dictionary
     data = {
@@ -19,6 +20,7 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
+        "hemispheres": hemisphere_image_urls,
         "last_modified": dt.datetime.now()
     }
     
@@ -26,7 +28,6 @@ def scrape_all():
     browser.quit()
     # return data
     return data
-    
 
 def mars_news(browser):
     # Visit the Mars news site
@@ -97,6 +98,38 @@ def mars_facts():
 
     # Convert dataframe into HTML format, add bootstrap
     return df.to_html()
+
+def hemisphere(browser):
+    # ## Scrape High-Resolution Mars’ Hemisphere Images and Titles
+    base_url = 'https://data-class-mars-hemispheres.s3.amazonaws.com/Mars_Hemispheres/'
+    url= f"{base_url}index.html"
+    
+    # Add try/except for error handling
+    try:
+        browser.visit(url)
+        
+        hemisphere_image_urls = []
+        html = browser.html
+        html_soup = soup(html, 'html.parser')
+        products_item = html_soup.find_all('a', class_='itemLink',href=True)
+        
+        for item in products_item:
+            hemispheres = {}
+            item_link = item['href']
+            if not item.get_text() and item_link != '#':
+                hemisphere_url = f"{base_url}{item_link}"
+                browser.visit(hemisphere_url)
+                html2 = browser.html
+                html_soup2 = soup(html2, 'html.parser')
+                image_title= html_soup2.find('h2', class_='title').get_text()
+                image_link = html_soup2.find('img', class_='wide-image').get('src')
+                hemispheres = dict([("img_url", f"{base_url}{image_link}"), ("title", image_title)])
+                hemisphere_image_urls.append(hemispheres)
+
+    except BaseException:
+        return None
+
+    return hemisphere_image_urls
 
 if __name__ == "__main__":
     # If running as script, print scraped data
