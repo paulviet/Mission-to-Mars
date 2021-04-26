@@ -31,7 +31,7 @@ The propose of this an
 scrape correctly wrote to the MongoDB document database:
 ![MongoDB](Resources/MongoDB.PNG)
 
-Additional changes for Challenge 3, Added Background Image (background-image), Changed button class to match Mars Colors (class="btn btn-warning") and updated div column class with formatting for smart phones as well as Desktops (<div class="col-xs-6 col-md-12">)
+Additional changes for Challenge 3, Added Background Image `background-image`, Changed button class to match Mars Colors `class="btn btn-warning"` and updated div column class with formatting for smart phones as well as Desktops `<div class="col-xs-6 col-md-12">`
 
 ## Summary
 
