@@ -36,3 +36,4 @@ Additional changes for Challenge 3, Added Background Image `background-image`, C
 ## Summary
 
 A Helicopter flew on Mars!
+![Mission_to_Mars](static/images/Mission_to_Mars.png)
